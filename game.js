@@ -3,9 +3,20 @@ const ctx = canvas.getContext("2d");
 
 // HIGH-DEFINITION RETINA RENDER RATIO ENGINE
 let dpr = window.devicePixelRatio || 1;
-canvas.width = window.innerWidth * dpr;
-canvas.height = window.innerHeight * dpr;
+
+// This tracks the real physical display dimensions of the user's screen
+let logicalWidth = window.innerWidth;
+let logicalHeight = window.innerHeight;
+
+canvas.width = logicalWidth * dpr;
+canvas.height = logicalHeight * dpr;
+
+// Constrain the visual layout bounding footprint via CSS rules
+canvas.style.width = logicalWidth + "px";
+canvas.style.height = logicalHeight + "px";
+
 ctx.scale(dpr, dpr);
+
 
 
 
@@ -197,16 +208,25 @@ let ship = {
 
 window.addEventListener("resize", () => {
     dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    logicalWidth = window.innerWidth;
+    logicalHeight = window.innerHeight;
+
+    canvas.width = logicalWidth * dpr;
+    canvas.height = logicalHeight * dpr;
+    
+    canvas.style.width = logicalWidth + "px";
+    canvas.style.height = logicalHeight + "px";
+    
     ctx.scale(dpr, dpr);
     generateBackdropStars();
+    
     if (isMenuMode || isGameOver) {
-        ship.x = window.innerWidth / 2;
-        ship.y = (window.innerHeight * 0.75) - 45;
+        ship.x = logicalWidth / 2;
+        ship.y = (logicalHeight * 0.75) - 45;
         cameraY = 0;
     }
 });
+
 
 // ====================================================
 // CORE CANVAS RESIZER: ENSURES ENTIRE SCREEN COVERAGE
@@ -307,7 +327,8 @@ function getAvailablePlanetImageIndex(currentScore) {
 // ==========================================
 function spawnWorldElements(startY, endY) {
     for (let y = startY; y > endY; y -= 160) {
-        let pX = randRange(60, window.innerWidth - 60);
+        // Uses logicalWidth instead of raw innerWidth to map coordinate arrays safely
+        let pX = randRange(60, logicalWidth - 60);
         let pRadius = randRange(25, 45);
         
         let modelIndex = getAvailablePlanetImageIndex(totalScore);
@@ -315,11 +336,14 @@ function spawnWorldElements(startY, endY) {
         planets.push({ 
             x: pX, 
             y: y, 
-            baseX: pX, // Static lock point to support slow sways
+            baseX: pX, 
             waveOffset: Math.random() * Math.PI * 2,
             radius: pRadius, 
             modelID: modelIndex 
         });
+        
+        // ... (Keep the rest of your original inner coin/portal spawning logic here)
+
 
                // NEW: Only a 40% chance for a planet to have any coins around it at all
                 if (Math.random() < 0.40) {
@@ -1593,10 +1617,21 @@ function update() {
             }
         }
 
-        if (ship.x - ship.radius < 0) { ship.x = ship.radius; ship.speedX *= -0.8; if (isShakeEnabled) screenShake = 3; }
-        else if (ship.x + ship.radius > window.innerWidth) { ship.x = window.innerWidth - ship.radius; ship.speedX *= -0.8; if (isShakeEnabled) screenShake = 3; }
-        if (ship.y - cameraY > window.innerHeight + 100) { triggerGameOver(); }
-    }
+        if (ship.x - ship.radius < 0) { 
+            ship.x = ship.radius; 
+            ship.speedX *= -0.8; 
+            if (isShakeEnabled) screenShake = 3; 
+        }
+        else if (ship.x + ship.radius > logicalWidth) { 
+            ship.x = logicalWidth - ship.radius; 
+            ship.speedX *= -0.8; 
+            if (isShakeEnabled) screenShake = 3; 
+        }
+        
+        if (ship.y - cameraY > logicalHeight + 100) { 
+            triggerGameOver(); 
+        }
+
 
 
 
