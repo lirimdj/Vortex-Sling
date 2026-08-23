@@ -1,0 +1,905 @@
+/* Core Layout Rules */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #05050b;
+    color: #ffffff;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+}
+
+/* TRUE STRETCH VIEWPORT CANVAS WRAPPER */
+canvas {
+    background: radial-gradient(circle, #0f0f23 0%, #05050b 100%);
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+.hidden { display: none !important; }
+
+/* Menu Overlay Baseline Container */
+.menu-overlay {
+    position: absolute;
+    width: 90%;
+    max-width: 400px;
+    height: 88%;
+    max-height: 610px;
+    background: rgba(5, 5, 15, 0.85); 
+    border: 1px solid rgba(0, 255, 204, 0.15);
+    box-shadow: inset 0 0 40px rgba(0, 255, 204, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+}
+
+/* Typography Aesthetics */
+.title-glow {
+    font-size: clamp(32px, 8vw, 46px);
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 4px;
+    color: #00ffcc;
+    text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+}
+
+.subtitle-text {
+    font-size: 12px;
+    letter-spacing: 4px; 
+    color: #ff9900;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+#menu-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+#best-score-container, #wallet-container, #shop-wallet {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+#best-score-container {
+    color: #ffcc00;
+    background: rgba(255, 204, 0, 0.08);
+    border: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+#wallet-container, #shop-wallet {
+    color: #00ffcc;
+    background: rgba(0, 255, 204, 0.08);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+#shop-wallet { margin-bottom: 20px; font-size: 16px; }
+/* ==========================================
+   OPTIONS CONFIGURATION TERMINAL
+   ========================================== */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 85%;
+}
+
+.option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.option-row button {
+    background: transparent;
+    border: 2px solid #ff0055;
+    color: #ff0055;
+    padding: 6px 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-row button.toggle-active {
+    border-color: #00ffcc;
+    color: #00ffcc;
+    background: rgba(0, 255, 204, 0.05);
+}
+
+.danger-btn {
+    border-color: #ff0055 !important;
+    background: rgba(255, 0, 85, 0.1) !important;
+    color: #fff !important;
+}
+
+/* ==========================================
+   SHIP SHOP HANGAR MODULE & SCROLLBARS
+   ========================================== */
+.shop-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 88%;
+}
+
+.scrollable-hangar {
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.scrollable-hangar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-hangar::-webkit-scrollbar-thumb {
+    background: rgba(0, 181, 255, 0.3);
+    border-radius: 4px;
+}
+
+/* Custom Glow Base Layout Setup */
+.shop-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    background: rgba(15, 15, 35, 0.75);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure the miniature preview ship graphic stands out */
+.shop-card img {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+    transition: transform 0.2s ease;
+}
+
+/* Hover or Active Accent Selection Animation scaling */
+.shop-card:hover {
+    transform: translateY(-2px);
+}
+
+.shop-card:hover img {
+    transform: scale(1.1);
+}
+
+
+.shop-card.locked { border-color: rgba(255, 255, 255, 0.04); }
+.shop-card.unlocked { border-color: rgba(0, 181, 255, 0.3); }
+.shop-card.active {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.04);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.12);
+}
+
+.skin-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: left;
+    padding-right: 10px;
+}
+
+.skin-name {
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+    color: #ffffff;
+}
+
+.skin-ability {
+    font-size: 11px;
+    color: #797994;
+    line-height: 1.3;
+}
+
+.skin-status {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    min-width: 75px;
+    text-align: center;
+}
+.active .skin-status { background: #00ffcc; color: #05050b; }
+.unlocked .skin-status { background: #00b5ff; color: #fff; }
+/* ==========================================
+   PREMIUM COIN STORE CRATE MATRIX
+   ========================================== */
+.premium-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 88%;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.premium-grid::-webkit-scrollbar { width: 4px; }
+.premium-grid::-webkit-scrollbar-thumb { background: rgba(0, 255, 204, 0.2); border-radius: 2px; }
+
+.premium-box {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(25, 20, 15, 0.7) 0%, rgba(10, 10, 20, 0.7) 100%);
+    border: 1px solid rgba(255, 204, 0, 0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.premium-box:hover {
+    border-color: rgba(255, 204, 0, 0.4);
+    background: linear-gradient(90deg, rgba(40, 30, 15, 0.8) 0%, rgba(15, 15, 30, 0.8) 100%);
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.1);
+}
+
+.box-icon { font-size: 24px; margin-right: 14px; }
+.box-title { font-weight: 800; font-size: 12px; letter-spacing: 1px; color: #a0a0c0; text-align: left; }
+.box-reward { font-weight: 900; font-size: 14px; color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.2); flex-grow: 1; text-align: left; margin-left: 10px; }
+
+.box-price {
+    background: #ffcc00; color: #05050b; border: none; font-weight: 900; font-size: 12px;
+    padding: 6px 12px; border-radius: 4px; box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); cursor: pointer;
+}
+
+/* Core Navigation Menu Button Layouts */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 80%;
+    max-width: 220px;
+}
+
+.neon-btn {
+    background: transparent; border: 2px solid #fff; padding: 11px;
+    font-size: 14px; font-weight: bold; letter-spacing: 2px; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); color: #fff;
+}
+
+.btn-green { border-color: #00ffcc; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3); }
+.btn-green:hover { background: #00ffcc; color: #05050b; box-shadow: 0 0 25px rgba(0, 255, 204, 0.6); }
+.btn-blue { border-color: #00b5ff; text-shadow: 0 0 8px rgba(0, 181, 255, 0.3); }
+.btn-blue:hover { background: #00b5ff; color: #05050b; box-shadow: 0 0 25px rgba(0, 181, 255, 0.6); }
+.btn-gold { border-color: #ffcc00; text-shadow: 0 0 8px rgba(255, 204, 0, 0.3); }
+.btn-gold:hover { background: #ffcc00; color: #05050b; box-shadow: 0 0 25px rgba(255, 204, 0, 0.6); }
+.btn-red { border-color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.3); }
+.btn-red:hover { background: #ff0055; color: #05050b; box-shadow: 0 0 25px rgba(255, 0, 85, 0.6); }
+.btn-outline-menu { border-color: #797994; color: #a0a0c0; }
+.btn-outline-menu:hover { background: rgba(121, 121, 148, 0.15); border-color: #fff; color: #fff; }
+.neon-btn:active { transform: scale(0.95); filter: brightness(1.3); }
+
+/* QUIT GAME MENU SPACING OVERRIDES */
+.quit-spacer {
+    margin-top: 12px;
+    border-style: dashed;
+    opacity: 0.85;
+}
+.quit-spacer:hover {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+}
+
+/* Compact Summary HUD Layers */
+#countdown-display {
+    position: absolute; font-size: clamp(80px, 20vw, 120px); font-weight: 900;
+    color: #ffffff; text-shadow: 0 0 30px rgba(255, 255, 255, 0.5); z-index: 25; animation: pulseZoom 1s infinite;
+}
+@keyframes pulseZoom { 0% { transform: scale(0.6); opacity: 0; } 20% { opacity: 1; } 10% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 0; } }
+
+#ui-layer { position: absolute; top: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 10; }
+#hud { display: flex; gap: clamp(15px, 5vw, 40px); }
+.stat-box { font-size: clamp(16px, 4vw, 22px); font-weight: 800; letter-spacing: 2px; color: #00ffcc; text-shadow: 0 0 12px rgba(0, 255, 204, 0.4); background: rgba(10, 10, 25, 0.75); padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(0, 255, 204, 0.2); }
+#instructions { font-size: clamp(10px, 2.5vw, 13px); color: #797994; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; text-align: center; padding: 0 10px; }
+
+/* HUD POWERUP AND ACTIVE SHIELD ROWS */
+#hud-extensions { display: flex; gap: 10px; margin-top: 8px; }
+#shield-display {
+    font-size: 13px; font-weight: 900; letter-spacing: 2px; color: #00b5ff;
+    background: rgba(0, 181, 255, 0.15); border: 1px solid #00b5ff;
+    text-shadow: 0 0 8px rgba(0, 181, 255, 0.6); padding: 4px 14px; border-radius: 15px;
+}
+#powerup-status {
+    font-size: 14px; font-weight: 900; letter-spacing: 2px; color: #ffcc00;
+    background: rgba(255, 204, 0, 0.15); border: 1px solid #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); padding: 6px 20px; border-radius: 20px;
+    margin-top: 12px; box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); animation: pulseGlow 1s infinite alternate;
+}
+.hidden-hud { display: none !important; }
+@keyframes pulseGlow { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
+
+/* Fullscreen Wormhole Portal Flash Trigger */
+#warp-flash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; z-index: 99999; pointer-events: none; opacity: 0; }
+#warp-flash.flash-active { animation: strobeWarp 0.4s ease-out forwards; }
+@keyframes strobeWarp { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Game Over Summary Modules */
+#game-over-screen { position: absolute; width: 75%; max-width: 290px; background: rgba(5, 5, 15, 0.94); border: 2px solid #ff0055; box-shadow: 0 0 30px rgba(255, 0, 85, 0.3); padding: 20px 15px; border-radius: 12px; text-align: center; z-index: 20; backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; }
+.glow-text { color: #ff0055; text-shadow: 0 0 15px rgba(255, 0, 85, 0.6); font-size: clamp(26px, 6vw, 32px); margin-top: 0; margin-bottom: 10px; letter-spacing: 2px; }
+#game-over-screen p { font-size: 14px; color: #a0a0c0; margin: 4px 0; }
+#game-over-screen span { color: #fff; font-weight: bold; }
+.game-over-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; width: 90%; max-width: 190px; }
+
+.action-btn { background: #00ffcc; color: #05050b; border: none; padding: 12px 20px; font-size: 15px; font-weight: bold; letter-spacing: 1px; border-radius: 6px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 204, 0.4); transition: all 0.2s ease; }
+.action-btn:hover { background: #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); }
+.action-btn:active { transform: scale(0.97); filter: brightness(1.2); }
+.btn-outline { background: transparent; border: 2px solid #797994; color: #a0a0c0; box-shadow: none; }
+.btn-outline:hover { background: rgba(121, 121, 148, 0.15); border-color: #ffffff; color: #ffffff; }
+
+/* Introductory Loading Overlays */
+#intro-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05050b; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s; opacity: 1; visibility: visible; }
+#intro-screen.fade-away { opacity: 0; visibility: hidden; }
+.intro-content { text-align: center; animation: introFadeIn 1s ease-out; }
+.intro-tag { font-size: 11px; letter-spacing: 2px; color: #ff9900; margin-bottom: 10px; font-weight: bold; }
+.intro-ad-title { font-size: 38px; font-weight: 900; letter-spacing: 3px; color: #ffffff; margin: 0; }
+.intro-ad-desc { color: #797994; font-size: 14px; margin-top: 5px; margin-bottom: 30px; }
+.intro-spinner { width: 40px; height: 40px; border: 3px solid rgba(0, 255, 204, 0.1); border-radius: 50%; border-top-color: #00ffcc; margin: 0 auto; animation: spinLoop 0.8s infinite linear; }
+@keyframes spinLoop { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes introFadeIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.hidden-menu { opacity: 0 !important; visibility: hidden !important; transition: opacity 0.8s ease-out, visibility 0.8s; }
+
+/* DYNAMIC SHOP SLIDE-IN ALERT WARNINGS */
+#shop-alert {
+    position: fixed; top: 10%; left: 50%; transform: translate(-50%, -20px);
+    background: rgba(255, 0, 85, 0.95); color: #ffffff; border: 2px solid #ff3300;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.6); padding: 12px 28px; border-radius: 8px;
+    font-weight: 900; letter-spacing: 2px; font-size: 9px; z-index: 9999; pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; opacity: 0;
+}
+#shop-alert.show-alert { opacity: 1; transform: translate(-50%, 0); }
+.hidden-alert { display: block !important; }
+
+/* VERTICAL PORTRAIT LOCK SYSTEM */
+#orientation-lock {
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05050b; z-index: 9999;
+    flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box;
+}
+#orientation-lock h2 { color: #00ffcc; font-weight: 900; letter-spacing: 2px; margin: 15px 0 5px 0; }
+#orientation-lock p { color: #797994; font-size: 12px; }
+.lock-icon { font-size: 50px; animation: rotateLoop 2s infinite ease-in-out; }
+@keyframes rotateLoop { 0% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } 100% { transform: rotate(0deg); } }
+@media (orientation: landscape) { #orientation-lock { display: flex; } }
+
+/* Mapped Color Schemes for Names and Inlined Emojis */
+#skin-ship1 .skin-name { color: #00ffcc; text-shadow: 0 0 6px rgba(0, 255, 204, 0.3); }
+#skin-ship2 .skin-name { color: #ff66cc; text-shadow: 0 0 6px rgba(255, 102, 204, 0.3); }
+#skin-ship3 .skin-name { color: #39ff14; text-shadow: 0 0 6px rgba(57, 255, 20, 0.3); }
+#skin-ship4 .skin-name { color: #9d4edd; text-shadow: 0 0 6px rgba(157, 78, 221, 0.3); }
+#skin-ship5 .skin-name { color: #00f5d4; text-shadow: 0 0 6px rgba(0, 245, 212, 0.3); }
+#skin-ship6 .skin-name { color: #ff0055; text-shadow: 0 0 6px rgba(255, 0, 85, 0.3); }
+#skin-ship7 .skin-name { color: #70d6ff; text-shadow: 0 0 6px rgba(112, 214, 255, 0.3); }
+#skin-ship8 .skin-name { color: #ffb703; text-shadow: 0 0 6px rgba(255, 183, 3, 0.3); }
+#skin-ship9 .skin-name { color: #e0aaff; text-shadow: 0 0 6px rgba(224, 170, 255, 0.3); }
+#skin-ship10 .skin-name { color: #a06cd5; text-shadow: 0 0 6px rgba(160, 108, 213, 0.3); }
+#skin-ship11 .skin-name { color: #b5179e; text-shadow: 0 0 6px rgba(181, 23, 158, 0.3); }
+#skin-ship12 .skin-name { color: #d00000; text-shadow: 0 0 6px rgba(208, 0, 0, 0.3); }
+#skin-ship13 .skin-name { color: #ff007f; text-shadow: 0 0 6px rgba(255, 0, 127, 0.3); }
+#skin-ship14 .skin-name { color: #ffee32; text-shadow: 0 0 6px rgba(255, 238, 50, 0.3); }
+#skin-ship15 .skin-name { color: #7209b7; text-shadow: 0 0 6px rgba(114, 9, 183, 0.3); }
+
+
+/* Core Layout Alignments */
+.shop-card {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between; /* Automatically pushes button to the right */
+    padding: 14px 18px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Left Group Alignment (Image + Stacked Text) */
+.shop-card-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hangar-ship-thumb {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+/* Stacked Text Configuration Container */
+.skin-text-details {
+    display: flex;
+    flex-direction: column; /* Forces description straight underneath title */
+    align-items: flex-start;
+    gap: 4px;
+}
+
+/* Typography Controls */
+.skin-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.skin-description {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5); /* Clean desaturated text color matrix */
+    text-align: left;
+}
+
+/* Right-Side Coin Button Placement Matrix */
+.skin-status {
+    background: #24243e;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #ffee32;
+    min-width: 65px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+.arcade-menu-top-board {
+    position: relative;
+    margin: 10px auto 25px auto; /* Centers horizontally and creates breathing space below it */
+    background: rgba(5, 5, 15, 0.75);
+    border: 1px solid rgba(0, 255, 204, 0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    width: 260px; /* Perfectly sized retro profile width */
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    z-index: 10;
+}
+.menu-board-title {
+    text-align: center;
+    font-weight: bold;
+    color: #00ffcc;
+    margin-bottom: 8px;
+    text-shadow: 0 0 6px #00ffcc;
+    letter-spacing: 1px;
+}
+.menu-leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+}
+.menu-leaderboard-score {
+    font-weight: bold;
+}
+
+
+
+/* ==================================================== */
+/* PREMIUM CYBERPUNK USER PROFILE MODAL RENDER OVERLAYS */
+/* ==================================================== */
+.profile-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(5, 5, 20, 0.93) 0%, rgba(2, 2, 8, 0.98) 100%);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999;
+}
+.profile-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(8, 8, 22, 0.95) 0%, rgba(4, 4, 12, 0.98) 100%);
+    border-left: 3px solid #00ffcc;
+    border-right: 3px solid #00ffcc;
+    border-top: 1px solid rgba(0, 255, 204, 0.2);
+    border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+    border-radius: 4px;
+    padding: 30px 25px; width: 290px;
+    text-align: center; font-family: 'Courier New', monospace; color: #ffffff;
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.15), inset 0 0 15px rgba(0,0,0,0.6);
+}
+.scifi-header-tag {
+    font-size: 9px; color: #00ffcc; opacity: 0.5; letter-spacing: 2px; margin-bottom: 6px;
+}
+.profile-card h2 { 
+    color: #ffffff; margin: 0 0 10px 0; font-size: 19px; letter-spacing: 2px; font-weight: 900;
+    text-shadow: 0 0 8px rgba(255,255,255,0.4); 
+}
+.profile-card p { 
+    font-size: 9px; opacity: 0.6; line-height: 1.5; margin-bottom: 22px; letter-spacing: 0.5px;
+}
+.input-glow-wrapper {
+    position: relative; margin-bottom: 22px;
+}
+.profile-card input {
+    width: 85%; padding: 10px; background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 2px;
+    color: #00ffcc; font-family: inherit; font-size: 15px; text-align: center;
+    outline: none; letter-spacing: 3px; font-weight: bold;
+    transition: all 0.3s ease;
+}
+.profile-card input:focus { 
+    border-color: #00ffcc; box-shadow: 0 0 12px rgba(0, 255, 204, 0.25); background: rgba(0, 255, 204, 0.05);
+}
+.profile-card button {
+    background: transparent; color: #00ffcc; border: 1px solid #00ffcc; padding: 10px 26px;
+    border-radius: 2px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 11px;
+    letter-spacing: 2px; transition: all 0.2s ease; position: relative; overflow: hidden;
+}
+.profile-card button:hover { 
+    background: #00ffcc; color: #04040c; box-shadow: 0 0 15px #00ffcc; font-weight: 900;
+}
+
+/* ==================================================== */
+/* FIXED CORNER POSITIONING FOR HUD HEADER WIDGET BADGES*/
+/* ==================================================== */
+/* Left Action Item: Pinned cleanly to the top left margin boundaries */
+.floating-hof-left-tag {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(180deg, rgba(12, 12, 28, 0.75) 0%, rgba(6, 6, 16, 0.85) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid rgba(0, 255, 204, 0.4);
+    border-radius: 4px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 1000; /* Keeps overlays positioned clearly above moving canvas actors */
+}
+
+/* Right Action Item: Pinned cleanly to the top right margin boundaries */
+.floating-pilot-tag {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(180deg, rgba(12, 12, 28, 0.75) 0%, rgba(6, 6, 16, 0.85) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid rgba(0, 255, 204, 0.4);
+    border-radius: 4px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.pilot-status-dot {
+    width: 6px; height: 6px; background-color: #00ffcc; border-radius: 50%;
+    box-shadow: 0 0 6px #00ffcc; animation: simpleTwinkle 2s infinite ease-in-out;
+}
+.pilot-label {
+    font-size: 9px; color: rgba(255, 255, 255, 0.5); font-weight: bold; letter-spacing: 1px;
+}
+.pilot-value {
+    font-size: 11px; color: #ffffff; font-weight: bold; letter-spacing: 1.5px;
+    text-shadow: 0 0 4px rgba(255,255,255,0.3);
+}
+
+/* Clickable feedback mouse parameters */
+.clickable-tag {
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out;
+}
+.clickable-tag:hover {
+    background: linear-gradient(180deg, rgba(0, 255, 204, 0.15) 0%, rgba(6, 6, 16, 0.9) 100%);
+    border-color: #00ffcc;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+}
+
+/* ==================================================== */
+/* INTERACTIVE HUD DROPDOWN DISPLAY MATRIX PANEL STYLES */
+/* ==================================================== */
+.pilot-dropdown-card {
+    position: fixed;
+    width: 250px;
+    background: linear-gradient(135deg, rgba(8, 8, 22, 0.96) 0%, rgba(3, 3, 10, 0.98) 100%);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 4px;
+    padding: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.75), 0 0 15px rgba(0, 255, 204, 0.1);
+    z-index: 2000;
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+}
+/* ==================================================== */
+/* DROPDOWN ORIENTATION OVERRIDES (DROPS STRAIGHT DOWN) */
+/* ==================================================== */
+/* FIXED: Now drops down directly underneath the Top-Left Record widget! */
+.HOF-CENTER-MODAL {
+    position: fixed !important;
+    top: 60px !important;    /* Suspended at the exact same height as the pilot dossier */
+    left: 20px !important;   /* Aligned perfectly with the left edge of your button */
+    right: auto !important;
+    transform: none !important; /* Removes the center-screen snapping effect completely */
+    width: 250px !important; /* Matches the exact size of your pilot card */
+}
+
+/* Pilot profile card drops down naturally right beneath the top right button */
+.PROFILE-adjust-X { 
+    position: fixed;
+    top: 60px;
+    right: 20px; 
+}
+
+
+.dropdown-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; color: #00ffcc; font-weight: bold; letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-bottom: 12px;
+}
+.close-dropdown-btn {
+    background: transparent; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 12px;
+}
+.close-dropdown-btn:hover { color: #ff3300; }
+
+/* Real-time statistics telemetry dashboard sub-grids */
+.stats-container-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px;
+}
+.stat-block-item {
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 2px; text-align: center;
+}
+.stat-lbl { font-size: 8px; color: rgba(255,255,255,0.4); letter-spacing: 1px; margin-bottom: 4px; }
+.stat-val { font-size: 14px; color: #ffffff; font-weight: bold; }
+
+/* Scoreboard listings rows formatting attributes */
+.menu-leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+    font-size: 11px;
+}
+.menu-leaderboard-score { font-weight: bold; }
+
+/* Configuration operations modification bays options */
+.profile-action-bay { display: flex; flex-direction: column; gap: 10px; }
+.edit-input-row { display: flex; gap: 6px; }
+.edit-input-row input {
+    flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px; color: #00ffcc; padding: 6px; font-size: 11px; text-align: center; outline: none; font-family: inherit;
+}
+.edit-input-row input:focus { border-color: #00ffcc; }
+.action-btn {
+    background: transparent; font-family: inherit; font-size: 10px; font-weight: bold;
+    cursor: pointer; border-radius: 2px; transition: all 0.2s ease;
+}
+/* FIXED: Renamed class so it ONLY styles your profile dossier dropdown buttons */
+.profile-action-btn {
+    background: transparent; 
+    font-family: inherit; 
+    font-size: 10px; 
+    font-weight: bold;
+    cursor: pointer; 
+    border-radius: 2px; 
+    transition: all 0.2s ease;
+}
+
+/* Also rename these matching button helpers sitting right below it in your file! */
+.save-name-btn { border: 1px solid #00ffcc; color: #00ffcc; padding: 0 10px; }
+.save-name-btn:hover { background: #00ffcc; color: #04040c; }
+.signout-btn {
+    border: 1px solid #ff3300; color: #ff3300; padding: 8px; width: 100%; letter-spacing: 1px;
+}
+.signout-btn:hover { background: #ff3300; color: #ffffff; box-shadow: 0 0 10px rgba(255,51,0,0.3); }
+
+/* Decorative keyframe loops */
+@keyframes simpleTwinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+.hidden-panel { display: none !important; }
+
+/* ==================================================== */
+/* VISUAL REPAIR: TARGETING ID STRAPS DIRECTLY (NO CRASH) */
+/* ==================================================== */
+/* 1. Force the Launch Again button to be a Solid Neon Teal bar */
+#restart-btn {
+    display: block !important;
+    width: 100% !important;
+    max-width: 240px !important;
+    margin: 12px auto !important;
+    padding: 12px 20px !important;
+    background-color: #00ffcc !important; /* Solid vibrant teal backdrop */
+    color: #050514 !important;            /* High contrast pitch black text */
+    font-family: 'Courier New', monospace !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    letter-spacing: 1.5px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-align: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+#restart-btn:hover {
+    background-color: #ffffff !important;
+    color: #050514 !important;
+    box-shadow: 0 0 20px #ffffff !important;
+}
+
+/* 2. Force the Main Menu button to be a crisp outline link */
+#menu-back-btn {
+    display: block !important;
+    width: 100% !important;
+    max-width: 240px !important;
+    margin: 12px auto !important;
+    padding: 12px 20px !important;
+    background-color: transparent !important;
+    color: #00ffcc !important;            /* Neon text reading */
+    font-family: 'Courier New', monospace !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    letter-spacing: 1.5px !important;
+    border: 1px solid #00ffcc !important; /* Crisp teal outline track */
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    text-align: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+#menu-back-btn:hover {
+    background-color: rgba(0, 255, 204, 0.1) !important;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.2) !important;
+}
+
+
+/* ==================================================== */
+/* TRUE FULL SCREEN PHONE BOUNDARY OVERRIDES            */
+/* ==================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000000;
+    
+    /* Disables safety notches padding bounds on iOS Safari & Android Chrome networks */
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+#gameCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 1;
+}
+
+/* 
+  OPTIONAL SAFETY BUFFER: If your Top-Left RECORD badge or Top-Right PILOT badge 
+  sit too close behind a physical camera island capsule, adjust their top margins 
+  using safe-area CSS constants!
+*/
+.floating-hof-left-tag {
+    top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+}
+.floating-pilot-tag {
+    top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+}
+.hud-header-action-row {
+    top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+}
+
+
+/* ==================================================== */
+/* OPTION INTERFACE: RETRO SLIDER TOGGLE SWITCHES      */
+/* ==================================================== */
+.options-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 14px auto !important;
+    max-width: 250px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.toggle-lbl {
+    letter-spacing: 1px;
+    font-weight: bold;
+    opacity: 0.85;
+}
+
+/* Core Container bounding box for the switch matrix */
+.custom-neon-switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 18px;
+}
+
+/* Hide the ugly native browser checkbox inputs completely */
+.custom-neon-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The outer sliding background track channel */
+.switch-slider-track {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The interior sliding selection bead node pin */
+.switch-slider-track::before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ACTIVE ON STATE: When checked, turn the slider track neon teal! */
+.custom-neon-switch input:checked + .switch-slider-track {
+    background-color: rgba(0, 255, 204, 0.15);
+    border-color: #00ffcc;
+    box-shadow: 0 0 8px rgba(0, 255, 204, 0.3);
+}
+
+/* ACTIVE ON STATE: Slide the inner handle pin cleanly to the right side edge */
+.custom-neon-switch input:checked + .switch-slider-track::before {
+    transform: translateX(16px);
+    background-color: #00ffcc;
+    box-shadow: 0 0 6px #00ffcc;
+}
+
+/* Hover mouse highlights to match sound options framework interactions */
+.custom-neon-switch:hover .switch-slider-track {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.custom-neon-switch input:checked:hover + .switch-slider-track {
+    box-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
+}
+
+

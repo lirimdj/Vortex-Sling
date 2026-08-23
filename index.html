@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Force the web application canvas viewport layout to fit entirely behind camera islands -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">]
+    <title>Vortex Sling</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- WARP PORTAL SCREEN FLASH OVERLAY -->
+    <div id="warp-flash" class="hidden-flash"></div>
+
+    <!-- MOBILE ACCESSIBILITY LOCK -->
+    <div id="orientation-lock">
+        <div class="lock-icon">🔄</div>
+        <h2>ROTATE YOUR PHONE</h2>
+        <p>Vortex Sling must be played in Vertical (Portrait) Mode only.</p>
+    </div>
+
+    <!-- INTRO SEQUENCE CARD -->
+    <div id="intro-screen">
+        <div class="intro-content">
+            <div class="intro-tag">Made by Lirim</div>
+            <h1 class="intro-ad-title">VORTEX SLING</h1>
+            <p class="intro-ad-desc">Loading Early Access Build...</p>
+            <div class="intro-spinner"></div>
+        </div>
+    </div>
+
+
+
+    
+    <!-- Main Menu Screen Layer -->
+    <div id="main-menu" class="menu-overlay hidden-menu">
+       <!-- ==================================================== -->
+<!-- INTERACTIVE OPPOSITE-SIDE RETRO HUD HEADER BADGES   -->
+<!-- ==================================================== -->
+<!-- Clickable Hall of Fame Trigger Badge (Pinned to Top-Left Corner) -->
+<div id="floating-hof-widget" class="floating-hof-left-tag clickable-tag" onclick="toggleHallOfFameDropdown(event)">
+    <span class="pilot-label">🏆 UNIVERSE RANK:</span>
+    <span id="display-top-score" class="pilot-value">0</span>
+</div>
+
+<!-- Clickable Pilot Status Widget (Pinned to Top-Right Corner) -->
+<div id="floating-pilot-widget" class="floating-pilot-tag clickable-tag hidden-panel" onclick="togglePilotProfileDropdown(event)">
+    <div class="pilot-status-dot"></div>
+    <span class="pilot-label">PILOT:</span>
+    <span id="display-pilot-name" class="pilot-value">UNKNOWN</span>
+</div>
+
+<!-- Sliding Center-Screen Hall of Fame Dropdown List Panel -->
+<div id="hof-dropdown-card" class="pilot-dropdown-card hidden-panel HOF-CENTER-MODAL">
+    <div class="dropdown-header">
+        <span>🏆 SECTOR HALL OF FAME 🏆</span>
+        <button class="close-dropdown-btn" onclick="toggleHallOfFameDropdown(event)">✕</button>
+    </div>
+    <!-- Live ranking rows will automatically print directly inside this wrapper -->
+    <div id="menu-leaderboard-rows-container"></div>
+</div>
+
+<!-- Sliding Profile Dropdown Overlay Modal (Stays Top-Right) -->
+<div id="pilot-profile-dropdown" class="pilot-dropdown-card hidden-panel PROFILE-adjust-X">
+    <div class="dropdown-header">
+        <span>PILOT DOSSIER</span>
+        <button class="close-dropdown-btn" onclick="togglePilotProfileDropdown(event)">✕</button>
+    </div>
+    <div class="stats-container-grid">
+        <div class="stat-block-item">
+            <div class="stat-lbl">BEST RUN</div>
+            <div id="stats-best-score" class="stat-val">0</div>
+        </div>
+        <div class="stat-block-item">
+            <div class="stat-lbl">WALLETS</div>
+            <div id="stats-total-coins" class="stat-val">0</div>
+        </div>
+    </div>
+        <!-- ==================================================== -->
+    <!-- DOSSIER MANAGEMENT OPERATION SYSTEM BAY -->
+    <!-- ==================================================== -->
+        <!-- ==================================================== -->
+    <!-- DOSSIER MANAGEMENT OPERATION SYSTEM BAY -->
+    <!-- ==================================================== -->
+    <div class="profile-action-bay">
+        <div class="edit-input-row" onclick="event.stopPropagation()">
+            <input type="text" id="edit-username-input" placeholder="CHANGE NAME..." maxlength="12">
+            <button class="profile-action-btn save-name-btn" onclick="event.stopPropagation(); updateProfileNameFromDropdown()">SAVE</button>
+        </div>
+        
+        <button class="profile-action-btn signout-btn" onclick="confirmAndDisconnectProfile()">Sign out</button>
+        
+        <!-- NEW RELOCATED PROFILE ELEMENT: Dedicated full erasure node -->
+        <button class="profile-action-btn wipe-all-data-btn" onclick="executeFullSystemProfileWipe()">WIPE ALL PROFILES & DATA</button>
+    </div>
+
+</div>
+       
+
+
+
+
+        
+
+        <h1 class="title-glow">VORTEX SLING</h1>
+        <div class="subtitle-text">Early Access</div>
+        
+        <div id="menu-stats">
+            <div id="best-score-container">BEST: <span id="best-score-val">0</span></div>
+            <div id="wallet-container">🪙 <span id="wallet-val">0</span></div>
+        </div>
+
+        <div class="menu-buttons">
+            <button id="start-btn" class="neon-btn btn-green">START GAME</button>
+            <button id="shop-toggle-btn" class="neon-btn btn-blue">SHIP HANGAR</button>
+            <button id="premium-toggle-btn" class="neon-btn btn-gold">🪙 BUY COINS</button>
+            <button id="options-btn" class="neon-btn btn-outline-menu">OPTIONS</button>
+            <button id="menu-quit-btn" class="neon-btn btn-red quit-spacer">QUIT GAME</button>
+        </div>
+    </div>
+    <!-- OPTIONS OVERLAY MODAL -->
+    <div id="options-menu" class="menu-overlay hidden">
+        <h2 class="title-glow" style="font-size: 32px; margin-bottom: 5px;">SETTINGS</h2>
+        <div class="subtitle-text" style="color: #797994; margin-bottom: 30px;">Configuration Terminal</div>
+        
+        <div class="options-container">
+            <div class="option-row">
+                <span>SOUND EFFECTS</span>
+                <button id="sfx-toggle-btn" class="toggle-active">ON</button>
+            </div>
+            <div class="option-row">
+                <span>SCREEN SHAKE</span>
+                <button id="shake-toggle-btn" class="toggle-active">ON</button>
+            </div>
+                     <!-- ==================================================== -->
+                    <!-- FIXED HIGH-DENSITY INTERACTIVE TOGGLE SLOTS          -->
+                    <!-- ==================================================== -->
+                    <div class="option-row">
+                <span>BACKGROUND STARS</span>
+                <button id="stars-toggle-btn" class="toggle-active">ON</button>
+            </div>
+
+        </div>
+
+        <button id="options-close-btn" class="neon-btn btn-red" style="margin-top: 40px; width: 140px; padding: 8px;">BACK</button>
+    </div>
+
+    <!-- SHIP HANGAR SHOP OVERLAY MODAL (15 Models Sorted Cheap to Expensive) -->
+    <div id="shop-menu" class="menu-overlay hidden">
+        <h2 class="title-glow" style="font-size: 30px; margin-bottom: 5px;">HANGAR GRID</h2>
+        <div class="subtitle-text" style="color: #00b5ff; margin-bottom: 10px;">Purchase & Equip Custom Models</div>
+        
+        <div id="shop-wallet">BANK: 🪙 <span id="shop-wallet-val">0</span></div>
+
+        <div class="shop-grid scrollable-hangar">
+            <!-- Ship 1 -->   
+                                <!-- Card 1: Striker -->
+                <div class="shop-card active" id="skin-ship1" onclick="buyOrEquipSkin('ship1', 0)">
+                    <div class="shop-card-left">
+                        <img src="models/ship1.png" class="hangar-ship-thumb" alt="Striker">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🚀 Striker</span>
+                            <span class="skin-description">Standard base chassis. No passive ability.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">EQUIPPED</span>
+                </div>
+
+                <!-- Card 2: Heartbreaker -->
+                <div class="shop-card locked" id="skin-ship2" onclick="buyOrEquipSkin('ship2', 15)">
+                    <div class="shop-card-left">
+                        <img src="models/ship2.png" class="hangar-ship-thumb" alt="Heartbreaker">
+                        <div class="skin-text-details">
+                            <span class="skin-name">💗 Heartbreaker</span>
+                            <span class="skin-description">Increases grapple range limit by +15%.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 15</span>
+                </div>
+
+                <!-- Card 3: Venom -->
+                <div class="shop-card locked" id="skin-ship3" onclick="buyOrEquipSkin('ship3', 30)">
+                    <div class="shop-card-left">
+                        <img src="models/ship3.png" class="hangar-ship-thumb" alt="Venom">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🟢 Venom</span>
+                            <span class="skin-description">Gives +10% faster orbit rotation speed.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 30</span>
+                </div>
+
+                <!-- Card 4: Reaver -->
+                <div class="shop-card locked" id="skin-ship4" onclick="buyOrEquipSkin('ship4', 45)">
+                    <div class="shop-card-left">
+                        <img src="models/ship4.png" class="hangar-ship-thumb" alt="Reaver">
+                        <div class="skin-text-details">
+                            <span class="skin-name">👻 Reaver</span>
+                            <span class="skin-description">Reduces linear flight air resistance slightly.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 45</span>
+                </div>
+
+                <!-- Card 5: Cosmo -->
+                <div class="shop-card locked" id="skin-ship5" onclick="buyOrEquipSkin('ship5', 60)">
+                    <div class="shop-card-left">
+                        <img src="models/ship5.png" class="hangar-ship-thumb" alt="Cosmo">
+                        <div class="skin-text-details">
+                            <span class="skin-name">👽 Cosmo</span>
+                            <span class="skin-description">Passive Magnet ability permanently active.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 60</span>
+                </div>
+
+                <!-- Card 6: Raider -->
+                <!-- Card 6: Raider -->
+                    <div class="shop-card locked" id="skin-ship6" onclick="buyOrEquipSkin('ship6', 75)">
+                        <div class="shop-card-left">
+                            <img src="models/ship6.png" class="hangar-ship-thumb" alt="Raider">
+                            <div class="skin-text-details">
+                                <span class="skin-name">💀 Raider</span>
+                                <span class="skin-description">Aggressive chassis configuration. Multiplies scores by x1.25.</span>
+                            </div>
+                        </div>
+                        <span class="skin-status">🪙 75</span>
+                    </div>
+
+
+                <!-- Card 7: Nova -->
+                <div class="shop-card locked" id="skin-ship7" onclick="buyOrEquipSkin('ship7', 90)">
+                    <div class="shop-card-left">
+                        <img src="models/ship7.png" class="hangar-ship-thumb" alt="Nova">
+                        <div class="skin-text-details">
+                            <span class="skin-name">💎 Nova</span>
+                            <span class="skin-description">Multiplies all altitude scores earned by x1.2.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 90</span>
+                </div>
+
+                <!-- Card 8: Fang -->
+                <div class="shop-card locked" id="skin-ship8" onclick="buyOrEquipSkin('ship8', 110)">
+                    <div class="shop-card-left">
+                        <img src="models/ship8.png" class="hangar-ship-thumb" alt="Fang">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🔥 Fang</span>
+                            <span class="skin-description">Increases initial launch speed profile by x1.5.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 110</span>
+                </div>
+
+                <!-- Card 9: Volt -->
+                <div class="shop-card locked" id="skin-ship9" onclick="buyOrEquipSkin('ship9', 130)">
+                    <div class="shop-card-left">
+                        <img src="models/ship9.png" class="hangar-ship-thumb" alt="Volt">
+                        <div class="skin-text-details">
+                            <span class="skin-name">⚡ Volt</span>
+                            <span class="skin-description">Delays the Anti-AFK engine stall timer.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 130</span>
+                </div>
+
+                <!-- Card 10: Walker -->
+                <div class="shop-card locked" id="skin-ship10" onclick="buyOrEquipSkin('ship10', 150)">
+                    <div class="shop-card-left">
+                        <img src="models/ship10.png" class="hangar-ship-thumb" alt="Walker">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🌀 Walker</span>
+                            <span class="skin-description">Doubles portal warp height altitude jumps.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 150</span>
+                </div>
+
+                <!-- Card 11: Phantom -->
+                <div class="shop-card locked" id="skin-ship11" onclick="buyOrEquipSkin('ship11', 180)">
+                    <div class="shop-card-left">
+                        <img src="models/ship11.png" class="hangar-ship-thumb" alt="Phantom">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🌌 Phantom</span>
+                            <span class="skin-description">Reduces asteroid sizes on screen by 20%.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 180</span>
+                </div>
+
+                <!-- Card 12: Drake -->
+                <div class="shop-card locked" id="skin-ship12" onclick="buyOrEquipSkin('ship12', 210)">
+                    <div class="shop-card-left">
+                        <img src="models/ship12.png" class="hangar-ship-thumb" alt="Drake">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🐉 Drake</span>
+                            <span class="skin-description">Survives 1 asteroid impact per match automatically.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 210</span>
+                </div>
+
+                <!-- Card 13: Nebula -->
+                <div class="shop-card locked" id="skin-ship13" onclick="buyOrEquipSkin('ship13', 250)">
+                    <div class="shop-card-left">
+                        <img src="models/ship13.png" class="hangar-ship-thumb" alt="Nebula">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🌠 Nebula</span>
+                            <span class="skin-description">Double Coins multiplier (x2 Coins) active.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 250</span>
+                </div>
+
+                <!-- Card 14: Solaris -->
+                <div class="shop-card locked" id="skin-ship14" onclick="buyOrEquipSkin('ship14', 300)">
+                    <div class="shop-card-left">
+                        <img src="models/ship14.png" class="hangar-ship-thumb" alt="Solaris">
+                        <div class="skin-text-details">
+                            <span class="skin-name">☀ Solaris</span>
+                            <span class="skin-description">Triple Coins multiplier (x3 Coins) active.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 300</span>
+                </div>
+
+                <!-- Card 15: Eclipse -->
+                <div class="shop-card locked" id="skin-ship15" onclick="buyOrEquipSkin('ship15', 500)">
+                    <div class="shop-card-left">
+                        <img src="models/ship15.png" class="hangar-ship-thumb" alt="Eclipse">
+                        <div class="skin-text-details">
+                            <span class="skin-name">🌑 Eclipse</span>
+                            <span class="skin-description">Ultimate legendary build. x3 Coins + permanent Magnet.</span>
+                        </div>
+                    </div>
+                    <span class="skin-status">🪙 500</span>
+                </div>
+
+
+        </div>
+
+        <button id="shop-close-btn" class="neon-btn btn-red" style="margin-top: 15px; width: 140px; padding: 8px;">BACK</button>
+    </div>
+
+    <!-- PREMIUM COIN STORE OVERLAY MODAL -->
+    <div id="premium-menu" class="menu-overlay hidden">
+        <h2 class="title-glow" style="font-size: 30px; margin-bottom: 5px; color: #ffcc00; text-shadow: 0 0 20px rgba(255,204,0,0.5);">COIN VAULT</h2>
+        <div class="subtitle-text" style="color: #ffffff; margin-bottom: 15px;">Premium Currency Terminal</div>
+
+        <div class="premium-grid">
+            <div class="premium-box" onclick="simulatePurchase(50, 0.99)">
+                <div class="box-icon">📦</div>
+                <div class="box-title">SCOUT LOOT</div>
+                <div class="box-reward">🪙 50 COINS</div>
+                <button class="box-price">$0.99</button>
+            </div>
+            <div class="premium-box" onclick="simulatePurchase(120, 1.99)">
+                <div class="box-icon">🎒</div>
+                <div class="box-title">PILOT PACK</div>
+                <div class="box-reward">🪙 120 COINS</div>
+                <button class="box-price">$1.99</button>
+            </div>
+            <div class="premium-box" onclick="simulatePurchase(300, 3.99)">
+                <div class="box-icon">💼</div>
+                <div class="box-title">ORBIT CACHE</div>
+                <div class="box-reward">🪙 300 COINS</div>
+                <button class="box-price">$3.99</button>
+            </div>
+            <div class="premium-box" onclick="simulatePurchase(750, 7.99)">
+                <div class="box-icon">🧳</div>
+                <div class="box-title">CAPTAIN STASH</div>
+                <div class="box-reward">🪙 750 COINS</div>
+                <button class="box-price">$7.99</button>
+            </div>
+            <div class="premium-box" onclick="simulatePurchase(2000, 14.99)">
+                <div class="box-icon">👑</div>
+                <div class="box-title">SINGULARITY CRATE</div>
+                <div class="box-reward">🪙 2,000 COINS</div>
+                <button class="box-price">$14.99</button>
+            </div>
+        </div>
+
+        <button id="premium-close-btn" class="neon-btn btn-red" style="margin-top: 15px; width: 140px; padding: 8px;">BACK</button>
+    </div>
+    <!-- Gameplay Live HUD Layers -->
+    <div id="ui-layer" class="hidden">
+        <div id="hud">
+            <div class="stat-box">COINS: <span id="coins-score">0</span></div>
+            <div class="stat-box">SCORE: <span id="score">0</span></div>
+        </div>
+        
+        <!-- Live Active Powerup Notifications Panel -->
+        <div id="hud-extensions">
+            <div id="shield-display" class="hidden-hud">🛡️ SHIELD ACTIVE</div>
+        </div>
+
+        <div id="powerup-status" class="hidden-hud">🧲 COIN MAGNET: <span id="magnet-timer-val">5.0</span>s</div>
+        <div id="instructions">TAP SCREEN to hook the nearest planet • RELEASE to sling!</div>
+    </div>
+
+    <!-- Active Center Gameplay Round Ignition Countdown -->
+    <div id="countdown-display" class="hidden">3</div>
+
+    <!-- Game Over Summary Scoreboard Module Card -->
+    <div id="game-over-screen" class="hidden">
+        <h1 class="glow-text">CRASHED!</h1>
+        <p>Coins Collected: <span id="final-coins">0</span></p>
+        <p>Final Score: <span id="final-score">0</span></p>
+        <div class="game-over-buttons">
+    <button id="restart-btn" class="action-btn">LAUNCH AGAIN</button>
+    <button id="menu-back-btn" class="action-btn btn-outline">MAIN MENU</button>
+</div>
+
+    </div>
+
+    <!-- DYNAMIC NEON SLIDE-IN ARCADE WARNING ELEMENT -->
+    <div id="shop-alert" class="hidden-alert">INSUFFICIENT COINS!</div>
+
+    <!-- Master Graphics High-Definition Rendering Canvas Component -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Master Game State Logic Scripts Engine Binder Interface -->
+    <script src="game.js"></script>
+</body>
+</html>
