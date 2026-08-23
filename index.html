@@ -6,8 +6,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">]
     <title>Vortex Sling</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Password Screen Styling */
+        #password-gate {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #111; color: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            font-family: sans-serif;
+        }
+        input, button { padding: 10px; margin: 10px; font-size: 16px; border-radius: 5px; border: none; }
+        button { background: #0070f3; color: white; cursor: pointer; }
+    </style>
 </head>
 <body>
+      <!-- The Protection Gate -->
+    <div id="password-gate">
+        <h2>Enter Password to Play</h2>
+        <input type="password" id="game-pass" placeholder="Password">
+        <button onclick="checkPassword()">Unlock Game</button>
+        <p id="error-msg" style="color: red; display: none;">Wrong password!</p>
+    </div>
     <!-- Put this right below your opening <body> tag -->
 <div id="game-content" style="display: none;">
     <!-- WARP PORTAL SCREEN FLASH OVERLAY -->
@@ -421,7 +439,19 @@
     <canvas id="gameCanvas"></canvas>
 
     <!-- Master Game State Logic Scripts Engine Binder Interface -->
-    <script src="game.js"></script>
+    <script src="game.js">
+         function checkPassword() {
+            const userInput = document.getElementById('game-pass').value;
+            // CHANGE "MySecret123" to whatever password you want to give your friends
+            if (userInput === "MySecret123") { 
+                document.getElementById('password-gate').style.display = 'none';
+                document.getElementById('game-content').style.display = 'block';
+                // Trigger your game initialization JavaScript functions here if needed
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+    </script>
     </div>
 <!-- Put this closing tag right above your closing </body> tag -->
 </body>
