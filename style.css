@@ -25,47 +25,57 @@ canvas {
     display: block;
 }
 
+
 .hidden { display: none !important; }
 
 /* Menu Overlay Baseline Container - FIXED MOBILE MATRIX */
 .menu-overlay {
     position: absolute;
-    width: 90%;
-    max-width: 400px;
     
-    /* FIX: Changed height parameters to scale fluidly with phone viewport ratios */
+    /* FIX 1: Centers the menu horizontally and vertically on mobile screens */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* FIX 2: Gives the menu a clean responsive width for mobile phone screens */
+    width: 85%;
+    max-width: 320px;
+    
+    /* FIX 3: Cleaned up the broken syntax code error that was crashing the page styling */
     height: auto;
     max-height: 85vh; 
+    background: rgba(5, 5, 15, 0.94); 
     
-    background: rgba(5, 5, 15, 0.92); /* Slightly darker for optimal text readability on mobile */
     border: 1px solid rgba(0, 255, 204, 0.25);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 255, 204, 0.05);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* FIX: Content stacks cleanly from the top down */
+    justify-content: flex-start; 
     z-index: 30;
     backdrop-filter: blur(8px);
     
-    /* FIX: Automatically embeds touch scroll containment if layout elements overflow on smaller displays */
-    padding: 20px 10px;
+    padding: 24px 16px;
     box-sizing: border-box;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-
-/* FIX: Forces all structural inner elements to remain safely inside the bounding box parent container */
+/* FIX 4: Forces inner titles, buttons, and elements to stay strictly inside the container */
 .menu-overlay > * {
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
     flex-shrink: 0;
 }
+
 
 /* Typography Aesthetics */
 .title-glow {
     font-size: clamp(32px, 8vw, 46px);
-    font-weight: 900;
+    font-weight: 600;
     margin: 0;
     letter-spacing: 4px;
     color: #00ffcc;
@@ -73,7 +83,7 @@ canvas {
 }
 
 .subtitle-text {
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 4px; 
     color: #ff9900;
     text-transform: uppercase;
@@ -576,40 +586,58 @@ canvas {
 /* ==================================================== */
 /* FIXED CORNER POSITIONING FOR HUD HEADER WIDGET BADGES*/
 /* ==================================================== */
-/* Left Action Item: Pinned cleanly to the top left margin boundaries */
-.floating-hof-left-tag {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: linear-gradient(180deg, rgba(12, 12, 28, 0.75) 0%, rgba(6, 6, 16, 0.85) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 255, 204, 0.4);
-    border-radius: 4px;
-    padding: 6px 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'Courier New', monospace;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    z-index: 1000; /* Keeps overlays positioned clearly above moving canvas actors */
-}
+/* Left Badge: Adjusted to look great on mobile scales */
 
-/* Right Action Item: Pinned cleanly to the top right margin boundaries */
-.floating-pilot-tag {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(180deg, rgba(12, 12, 28, 0.75) 0%, rgba(6, 6, 16, 0.85) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 255, 204, 0.4);
-    border-radius: 4px;
-    padding: 6px 12px;
+/* Hall of Fame Badge - Fixed to the Top Left Corner */
+.floating-hof-left-tag,
+#hall-of-fame-badge, 
+.hof-badge {
+    position: fixed !important;
+    top: max(12px, env(safe-area-inset-top)) !important;
+    left: 12px !important;
+    right: auto !important;
+    
+    /* Responsive sizing so it doesn't block the center menu */
+    width: auto !important;
+    max-width: 40vw !important; 
+    
+    background: rgba(12, 12, 28, 0.95);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-bottom: 2px solid rgba(0, 255, 204, 0.7);
+    border-radius: 6px;
+    padding: 6px 10px;
     display: flex;
     align-items: center;
     gap: 6px;
-    font-family: 'Courier New', monospace;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    font-size: 13px; /* Slightly downscaled for mobile viewports */
+}
+/* Right Action Item: Pinned cleanly to the top right margin boundaries */
+/* Pilot Status Badge - Fixed to the Top Right Corner */
+.floating-pilot-tag,
+#pilot-badge,
+.pilot-badge {
+    position: fixed !important;
+    top: max(12px, env(safe-area-inset-top)) !important;
+    right: 12px !important;
+    left: auto !important;
+    
+    /* Responsive sizing so it doesn't block the center menu */
+    width: auto !important;
+    max-width: 40vw !important;
+    
+    background: rgba(12, 12, 28, 0.95);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-bottom: 2px solid rgba(0, 255, 204, 0.7);
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    font-size: 13px; /* Slightly downscaled for mobile viewports */
 }
 
 .pilot-status-dot {
@@ -636,38 +664,45 @@ canvas {
 }
 
 /* ==================================================== */
-/* INTERACTIVE HUD DROPDOWN DISPLAY MATRIX PANEL STYLES */
-/* ==================================================== */
+/* Base configuration for dropdown details cards */
 .pilot-dropdown-card {
-    position: fixed;
-    width: 250px;
-    background: linear-gradient(135deg, rgba(8, 8, 22, 0.96) 0%, rgba(3, 3, 10, 0.98) 100%);
-    border: 1px solid rgba(0, 255, 204, 0.3);
-    border-radius: 4px;
-    padding: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.75), 0 0 15px rgba(0, 255, 204, 0.1);
+    position: fixed !important;
+    width: 80vw !important;
+    max-width: 260px !important;
+    background: rgba(5, 5, 15, 0.98);
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    border-radius: 8px;
+    padding: 12px;
     z-index: 2000;
-    font-family: 'Courier New', monospace;
-    color: #ffffff;
+    box-sizing: border-box;
 }
+
+
+
+/* Ensure inner layout items compress fluidly */
+.pilot-dropdown-card > * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 /* ==================================================== */
 /* DROPDOWN ORIENTATION OVERRIDES (DROPS STRAIGHT DOWN) */
 /* ==================================================== */
-/* FIXED: Now drops down directly underneath the Top-Left Record widget! */
+/* Left Dropdown opens cleanly right beneath the HOF badge */
 .HOF-CENTER-MODAL {
-    position: fixed !important;
-    top: 60px !important;    /* Suspended at the exact same height as the pilot dossier */
-    left: 20px !important;   /* Aligned perfectly with the left edge of your button */
+    top: calc(52px + env(safe-area-inset-top, 0px)) !important;    
+    left: 12px !important;   
     right: auto !important;
-    transform: none !important; /* Removes the center-screen snapping effect completely */
-    width: 250px !important; /* Matches the exact size of your pilot card */
+    transform: none !important;
 }
 
-/* Pilot profile card drops down naturally right beneath the top right button */
+
+
 .PROFILE-adjust-X { 
-    position: fixed;
-    top: 60px;
-    right: 20px; 
+    top: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    right: 12px !important;
+    left: auto !important;
+    transform: none !important;
 }
 
 
