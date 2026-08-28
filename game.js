@@ -3,18 +3,8 @@ const ctx = canvas.getContext("2d");
 
 // HIGH-DEFINITION RETINA RENDER RATIO ENGINE
 let dpr = window.devicePixelRatio || 1;
-
-// This tracks the real physical display dimensions of the user's screen
-let logicalWidth = window.innerWidth;
-let logicalHeight = window.innerHeight;
-
-canvas.width = logicalWidth * dpr;
-canvas.height = logicalHeight * dpr;
-
-// Constrain the visual layout bounding footprint via CSS rules
-canvas.style.width = logicalWidth + "px";
-canvas.style.height = logicalHeight + "px";
-
+canvas.width = window.innerWidth * dpr;
+canvas.height = window.innerHeight * dpr;
 ctx.scale(dpr, dpr);
 
 
@@ -197,31 +187,35 @@ updateWalletDisplays();
 let ship = {
     x: window.innerWidth / 2,
     y: window.innerHeight * 0.75 - 45, 
-    radius: 14, // <--- CHANGE THIS NUMBER
+    radius: 10, // <--- Ship radius bounds
     angle: 0,
     spinSpeed: 0.06,
     speedX: 0,
-    speedY: 0 
+    speedY: 0,
+    // --- NEW DASH PROPERTIES ---
+    isDashing: false,
+    dashSpeedMultiplier: 2.8,
+    dashDuration: 180, // milliseconds
+    dashTimer: 0,
+    dashCooldown: 1200, // milliseconds
+    lastDashTime: 0,
+    dashDirX: 0,
+    dashDirY: 0
 };
+
+// Particle array for custom dynamic trails
+let engineTrailParticles = [];
 
 
 window.addEventListener("resize", () => {
     dpr = window.devicePixelRatio || 1;
-    logicalWidth = window.innerWidth;
-    logicalHeight = window.innerHeight;
-
-    canvas.width = logicalWidth * dpr;
-    canvas.height = logicalHeight * dpr;
-    
-    canvas.style.width = logicalWidth + "px";
-    canvas.style.height = logicalHeight + "px";
-    
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
     ctx.scale(dpr, dpr);
     generateBackdropStars();
-    
     if (isMenuMode || isGameOver) {
-        ship.x = logicalWidth / 2;
-        ship.y = (logicalHeight * 0.75) - 45;
+        ship.x = window.innerWidth / 2;
+        ship.y = (window.innerHeight * 0.75) - 45;
         cameraY = 0;
     }
 });
@@ -325,23 +319,25 @@ function getAvailablePlanetImageIndex(currentScore) {
 // ==========================================
 function spawnWorldElements(startY, endY) {
     for (let y = startY; y > endY; y -= 160) {
-        // Uses logicalWidth instead of raw innerWidth to map coordinate arrays safely
-        let pX = randRange(60, logicalWidth - 60);
-        let pRadius = randRange(25, 45);
+        let pX = randRange(60, window.innerWidth - 60);
+        
+        // LOGICAL SIZING: 85% chance for a small planet, 15% chance for a massive gas giant
+        let pRadius;
+        if (Math.random() > 0.15) {
+            pRadius = randRange(15, 28); // Smaller, precision targets
+        } else {
+            pRadius = randRange(40, 60); // Occasional large planet
+        }
         
         let modelIndex = getAvailablePlanetImageIndex(totalScore);
         
         planets.push({ 
-            x: pX, 
-            y: y, 
-            baseX: pX, 
-            waveOffset: Math.random() * Math.PI * 2,
-            radius: pRadius, 
-            modelID: modelIndex 
+            x: pX, y: y, baseX: pX, waveOffset: Math.random() * Math.PI * 2,
+            radius: pRadius, modelID: modelIndex 
         });
 
-               // NEW: Only a 40% chance for a planet to have any coins around it at all
-                if (Math.random() < 0.40) {
+        // 40% chance for a planet to have any coins around it
+        if (Math.random() < 0.40) {
             for (let i = 0; i < 2; i++) {
                 let cAngle = randRange(0, Math.PI * 2);
                 let cDist = pRadius + randRange(20, 45); 
@@ -352,10 +348,9 @@ function spawnWorldElements(startY, endY) {
         // ====================================================
         // ANTI-PLANET SPAWNING FIX FOR MAGNETS, SHIELDS & PORTALS
         // ====================================================
-        // Calculate an X coordinate on the opposite side of the planet center (pX)
         let safeX = pX > window.innerWidth / 2 
-            ? randRange(40, pX - pRadius - 40)             // Spawn left if planet is right
-            : randRange(pX + pRadius + 40, window.innerWidth - 40); // Spawn right if planet is left
+            ? randRange(40, pX - pRadius - 40)             
+            : randRange(pX + pRadius + 40, window.innerWidth - 40); 
 
         // 1. Safe Magnets Spawning
         if (Math.random() > 0.8 && y < (window.innerHeight * 0.75 - 400)) {
@@ -372,21 +367,30 @@ function spawnWorldElements(startY, endY) {
             portals.push({ x: safeX, y: y - 90, radius: 22, active: true });
         }
 
-
-                // Dynamic spawn threshold based on player score
-        let spawnThreshold = 0.4; // Default original threshold (60% spawn chance)
+        // ====================================================
+        // DYNAMIC PROGRESSIVE ASTEROID SPAWNING
+        // ====================================================
+        let spawnChance = 0.05; // 5% chance to see an asteroid right from the start (0 to 100)
         
-        if (score < 100) {
-            spawnThreshold = 0.85; // Only 15% spawn chance (much cleaner start)
-        } else if (score < 200) {
-            spawnThreshold = 0.65; // 35% spawn chance (gradual ramp up)
+        if (totalScore >= 100 && totalScore < 300) {
+            spawnChance = 0.15; // 15% chance
+        } else if (totalScore >= 300 && totalScore < 600) {
+            spawnChance = 0.30; // 30% chance
+        } else if (totalScore >= 600 && totalScore < 1000) {
+            spawnChance = 0.45; // 45% chance
+        } else if (totalScore >= 1000) {
+            spawnChance = 0.60; // 60% chance (Maximum density)
         }
 
-        // Spawn asteroids using the dynamic threshold
-        if (Math.random() > spawnThreshold && y < (window.innerHeight * 0.75 - 200)) {
-            asteroids.push({ x: randRange(30, window.innerWidth - 30), y: y - 80, radius: randRange(14, 20), baseSpeedX: randRange(-1.2, 1.2) });
+        // Spawn asteroids using the calculated chance
+        if (Math.random() < spawnChance && y < (window.innerHeight * 0.75 - 200)) {
+            asteroids.push({ 
+                x: randRange(30, window.innerWidth - 30), 
+                y: y - 80, 
+                radius: randRange(14, 20), 
+                baseSpeedX: randRange(-1.2, 1.2) 
+            });
         }
-
     }
 }
 
@@ -848,6 +852,30 @@ function emitCustomPlumeParticles(shipX, shipY, releaseVx, releaseVy) {
     }
 */
 
+function drawGalacticTethers(ctx) {
+    planets.forEach((planet, index) => {
+        // Draw constellation lines connecting adjacent planets
+        if (index > 0) {
+            const prev = planets[index - 1];
+            ctx.beginPath();
+            ctx.moveTo(prev.x, prev.y);
+            ctx.lineTo(planet.x, planet.y);
+            ctx.strokeStyle = "rgba(0, 243, 255, 0.15)"; 
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 10]); // Neon dashed energy line
+            ctx.stroke();
+            ctx.setLineDash([]); 
+        }
+
+        // Render an ambient gravity orbit ring
+        ctx.beginPath();
+        ctx.arc(planet.x, planet.y, planet.radius * 2.2, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 0, 128, 0.05)"; 
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+}
+
 
 function handleTap() {
     if (isGameOver || isMenuMode || isCountingDown) return;
@@ -941,6 +969,15 @@ function handleTap() {
 }
 
 }
+
+
+// Paste the call right here:
+drawGalacticTethers(ctx);
+
+// Your existing code that draws the planets will look something like this:
+planets.forEach(planet => {
+    // ctx.drawImage(...) or ctx.arc(...)
+});
 
 
 window.addEventListener("mousedown", (e) => {
